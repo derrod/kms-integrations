@@ -29,15 +29,6 @@ std::string EnumNameOrValue(std::string name, int value) {
 }
 
 bool IsLoadable(const kms_v1::CryptoKeyVersion& ckv) {
-  if (ckv.protection_level() != kms_v1::ProtectionLevel::HSM) {
-    LOG(INFO) << "INFO: version " << ckv.name()
-              << " is not loadable due to unsupported protection level "
-              << EnumNameOrValue(
-                     kms_v1::ProtectionLevel_Name(ckv.protection_level()),
-                     ckv.protection_level());
-    return false;
-  }
-
   if (ckv.state() != kms_v1::CryptoKeyVersion::ENABLED) {
     LOG(INFO) << "INFO: version " << ckv.name()
               << " is not loadable due to unsupported state "

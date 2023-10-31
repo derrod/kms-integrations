@@ -50,13 +50,6 @@ absl::StatusOr<kms_v1::PublicKey> GetPublicKey(const KmsClient& client,
     return resp_status;
   }
 
-  if (pub_resp->protection_level() != kms_v1::ProtectionLevel::HSM) {
-    return NewError(
-        absl::StatusCode::kFailedPrecondition,
-        "the key is not loadable due to unsupported protection level",
-        NTE_NOT_SUPPORTED, SOURCE_LOCATION);
-  }
-
   return *pub_resp;
 }
 
