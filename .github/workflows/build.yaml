@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install CNG SDK
+        run: |
+          curl -o cpdksetup.exe https://download.microsoft.com/download/1/7/6/176909B0-50F2-4DF3-B29B-830A17EA7E38/CPDK_RELEASE_UPDATE/cpdksetup.exe
+          Start-Process -FilePath .\cpdksetup.exe -ArgumentList "/features + /quiet /log cpdksetup.log" -Wait
+
+      - name: Build
+        run: bazel build //kmscng/main:installer
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: bazel-bin/**/*
